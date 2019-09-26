@@ -1,0 +1,58 @@
+<div class="row" *ngIf="isLoggedIn" style="margin-top: 30px">
+    <!--post tweet-->
+    <div class="post-tweet-container">
+        <form (ngSubmit)="onPostTweet(form)" #form="ngForm" id="form">
+            <div class="post-tweet-form-container">
+                <textarea class="tweetArea" id="content" name="content" #content="ngModel"
+                          placeholder="Whats on your mind ?" rows="3" maxlength="255" form="form" [(ngModel)] = "postTweetContent">
+                </textarea>
+                <div class="ta-count-container">
+                    <span class="ta-span-count"> {{ postTweetContent.length }} / 255</span>
+
+                </div>
+            </div>
+            <button class=" tweet-button" type="submit">
+                <span class="span-white">Tweet</span>
+            </button>
+        </form>
+    </div>
+    <!--<br>-->
+    <!--tweets-->
+    <div class="tweetEntry-tweetHolder">
+        <div *ngIf="newTweet">
+            <button type="button" (click)="onNewTweet()">New Tweets</button>
+        </div>
+        <div class="tweetEntry" *ngFor="let tweet of timeline">
+            <div class="tweetEntry-content">
+                <!--account info + date-->
+                <a class="tweetEntry-account-group" [routerLink]="['profiles', tweet.profileId]">
+                    <img class="tweetEntry-avatar">
+                    <strong class="tweetEntry-fullname"> {{ tweet.displayName }} </strong>
+                    <span class="tweetEntry-username">@<b>{{ tweet.login }}</b></span>
+                    <span class="tweetEntry-timestamp">- {{ tweet.time | date: "HH:mm:ss dd/MM/yy" }}</span>
+                </a>
+                <!--delete my tweet 'button'-->
+                <div *ngIf="tweet.profileId == profile.id" class="tweetEntry-account-delete"
+                     (click)="deleteTweet(tweet.id, tweet)">
+                    X
+                </div>
+                <!--tweet content-->
+                <div class="tweetEntry-text-container">
+                    <!--Profile id > {{ tweet.profileId }} tweetId > {{ tweet.id }}<br>-->
+                    {{ tweet.content }}
+                </div>
+            </div>
+        </div>
+        <!--ask more tweets button-->
+        <!--todo make it round -->
+        <div class="more-button-div">
+            <button type="button" (click)="onMoreTweets()" *ngIf="isMore">More</button>
+            <span *ngIf="!isMore">No more tweets</span>
+            <!--todo delete-->
+            <!--timeline tweets count-->
+            <br>
+                Tweet count = {{ timeline.length }}
+        </div>
+    </div>
+            <br>
+</div>

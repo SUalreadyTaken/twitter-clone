@@ -1,0 +1,92 @@
+<div class="class=col-md-4" style="margin-right: auto; margin-left: auto;" *ngIf="isLoggedIn">
+    <div>
+        <div class="container" style="width: 588px;">
+            <div class="row">
+                <div class="twPc-div">
+                    <a class="twPc-bg twPc-block"></a>
+
+                    <div>
+                        <!--follow/unfollow/edit-->
+                        <div align="right" style="margin-right: 10px">
+
+                            <button class="twPc-button" *ngIf="buttonType == 0">
+                                <span class="span-white">Edit</span>
+                            </button>
+                            <button class="twPc-button following" *ngIf="buttonType == 1"
+                                    (click)="onDeleteFollow(profile.id)">
+                                <span class="span-white">Following</span>
+                            </button>
+                            <button class="twPc-button follow" *ngIf="buttonType == 2"
+                                    (click)="onSetFollow(profile.id)">
+                                <span class="span-follow">Follow</span>
+                            </button>
+                        </div>
+                        <!--avatar-->
+                        <a [routerLink]="['/profiles/', profile.id]" class="twPc-avatarLink">
+                            <img class="twPc-avatarImg">
+                        </a>
+                        <div>
+                            <!--name-->
+                            <div class="twPc-divName">
+                                <a [routerLink]="['/profiles/', profile.id]">{{ profile.displayName }}</a>
+                            </div>
+                            <span>
+				                <a [routerLink]="['/profiles/', profile.id]">@<span>{{ profile.login}}</span></a>
+			                </span>
+                            <!--stats-->
+                            <div class="twPc-divStats">
+                                <p> {{ profile.description }}</p>
+                                <ul class="twPc-Arrange">
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['/profiles/', profile.id]">
+                                            <span class="twPc-StatLabel twPc-block">Tweets</span>
+                                            <span class="twPc-StatValue">{{ profile.tweetsCount }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['/profiles/', profile.id, 'following']">
+                                            <span class="twPc-StatLabel twPc-block">Following</span>
+                                            <span class="twPc-StatValue">{{ profile.followingCount }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['/profiles/', profile.id, 'followers']">
+                                            <span class="twPc-StatLabel twPc-block">Followers</span>
+                                            <span class="twPc-StatValue">{{ profile.followersCount}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--tweets-->
+        <div class="tweetEntry-tweetHolder">
+            <div class="tweetEntry" *ngFor="let tweet of tweetsList">
+                <div class="tweetEntry-content">
+                    <!--account info + date-->
+                    <a class="tweetEntry-account-group" [routerLink]="['../', tweet.profileId]">
+                        <img class="tweetEntry-avatar" [src]="">
+                        <strong class="tweetEntry-fullname"> {{ tweet.displayName }} </strong>
+                        <span class="tweetEntry-username">@<b>{{ tweet.login }}</b></span>
+                        <span class="tweetEntry-timestamp">- {{ tweet.time | date: "HH:mm:ss dd/MM/yy" }}</span>
+                    </a>
+                    <!--delete my tweet 'button'-->
+                    <div *ngIf="tweet.profileId == myProfile.id" class="tweetEntry-account-delete"
+                         (click)="deleteTweet(tweet.id, tweet)">
+                        X
+                    </div>
+                    <!--tweet content-->
+                    <div class="tweetEntry-text-container">{{ tweet.content }}</div>
+
+                </div>
+            </div>
+            <div class="more-button-div">
+                <button type="button" (click)="onMoreTweets()" *ngIf="isMore">More</button>
+                <span *ngIf="!isMore">No more tweets</span>
+            </div>
+        </div>
+    </div>
+</div>

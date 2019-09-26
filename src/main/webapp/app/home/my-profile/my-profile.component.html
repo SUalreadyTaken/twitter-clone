@@ -1,0 +1,54 @@
+<!--<div *ngIf="gotProfile">-->
+    <!--<p [routerLink]="['/profile/', profile.id, 'followers']"> click me lala </p>-->
+    <!--<div class="row">-->
+        <div *ngIf="gotProfile" class="twPc-div">
+            <a class="twPc-bg twPc-block"></a>
+
+            <div>
+                <div align="right" style="margin-right: 10px">
+                    <button class="twPc-button">
+                        <span class="span-white">Edit</span>
+                    </button>
+                </div>
+
+                <a [routerLink]="['/profiles/', profile.id]" class="twPc-avatarLink">
+                    <img class="twPc-avatarImg">
+                </a>
+
+                <div>
+                    <div class="twPc-divName">
+                        <a [routerLink]="['/profiles/', profile.id]">{{ profile.displayName }}</a>
+                    </div>
+                    <span>
+				            <a [routerLink]="['/profiles/', profile.id]">@<span>{{ profile.login}}</span></a>
+			            </span>
+
+                    <div class="twPc-divStats">
+                        <p> {{ profile.description }}</p>
+                        <ul class="twPc-Arrange">
+                            <li class="twPc-ArrangeSizeFit">
+                                <a [routerLink]="['/profiles/', profile.id]">
+                                    <span class="twPc-StatLabel twPc-block">Tweets</span>
+                                    <span class="twPc-StatValue">{{ profile.tweetsCount }}</span>
+                                </a>
+                            </li>
+                            <li class="twPc-ArrangeSizeFit">
+                                <a [routerLink]="['profiles', profile.id, 'following']">
+                                    <span class="twPc-StatLabel twPc-block">Following</span>
+                                    <span class="twPc-StatValue">{{ profile.followingCount }}</span>
+                                </a>
+                            </li>
+                            <li class="twPc-ArrangeSizeFit">
+                                <a [routerLink]="['profiles', profile.id, 'followers']">
+                                    <span class="twPc-StatLabel twPc-block">Followers</span>
+                                    <span class="twPc-StatValue">{{ profile.followersCount}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--</div>-->
+<!--</div>-->
+

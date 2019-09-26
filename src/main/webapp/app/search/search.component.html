@@ -1,0 +1,106 @@
+<div *ngIf="loggedIn" class="search-page-container">
+    <!--SEARCH-->
+    <!--todo search button and disable it if input is empty.. atm  enter only-->
+    <div class="search-container">
+        <form (ngSubmit)="onSearch(form)" #form="ngForm">
+            <div class="search-form-container">
+                <div class="search-radio-container">
+                    <input type="radio" name="gender" value="male" (click)="onTweet(form)" checked="checked">
+                    Tweets
+                    <input class="profile-search-radio" type="radio" name="gender" value="male" (click)="onProfile(form)">
+                    Profiles
+                </div>
+                <input class="search-input" type="text" id="search" name="search" ngModel>
+            </div>
+        </form>
+    </div>
+
+    <!--TWEETS-->
+
+    <div *ngIf="searchTweets">
+        <div class="tweetEntry-tweetHolder">
+            <div class="tweetEntry" *ngFor="let tweet of tweetsResult">
+                <div class="tweetEntry-content">
+                    <a class="tweetEntry-account-group" [routerLink]="['/profiles/', tweet.profileId]">
+                        <img class="tweetEntry-avatar" [src]="">
+                        <!--<img class="tweetEntry-avatar" src="../../../content/images/jhipster_family_member_0_head-192.png">-->
+                        <strong class="tweetEntry-fullname"> {{ tweet.displayName }} </strong>
+                        <span class="tweetEntry-username">@<b>{{ tweet.login }}</b></span>
+                        <span class="tweetEntry-timestamp">- {{ tweet.time | date: "HH:mm:ss dd/MM/yy" }}</span>
+                    </a>
+                    <div class="tweetEntry-text-container">{{ tweet.content }}</div>
+                </div>
+            </div>
+            <div *ngIf="empty">
+                <p>Search came in empty</p>
+            </div>
+        </div>
+    </div>
+
+    <!--PROFILES-->
+
+    <div *ngIf="!searchTweets" >
+        <div class="container" *ngFor="let profile of profilesResult">
+            <div class="row">
+                <div class="twPc-div">
+                    <a class="twPc-bg twPc-block"></a>
+
+                    <div>
+                        <div align="right" style="margin-right: 10px">
+                            <button class="twPc-button following" type="button" (click)="onDeleteFollow(profile.id)"
+                                    *ngIf="profile.following">
+                                <span class="span-white">Following</span>
+                            </button>
+                            <button class="twPc-button follow" type="button" (click)="onSetFollow(profile.id)"
+                                    *ngIf="!profile.following">
+                                <span class="span-follow">Follow</span>
+                            </button>
+                        </div>
+
+                        <a [routerLink]="['/profiles/', profile.id]" class="twPc-avatarLink">
+                            <img class="twPc-avatarImg">
+                        </a>
+
+                        <div>
+                            <div class="twPc-divName">
+                                <a [routerLink]="['/profiles/', profile.id]">{{ profile.displayName }}</a>
+                            </div>
+                            <span>
+				            <a [routerLink]="['/profiles/', profile.id]">@<span>{{ profile.login}}</span></a>
+			            </span>
+
+                            <div class="twPc-divStats">
+                                <p> {{ profile.description }}</p>
+                                <ul class="twPc-Arrange">
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['/profiles/', profile.id]">
+                                            <span class="twPc-StatLabel twPc-block">Tweets</span>
+                                            <span class="twPc-StatValue">{{ profile.tweetsCount }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['following', profile.id]">
+                                            <span class="twPc-StatLabel twPc-block">Following</span>
+                                            <span class="twPc-StatValue">{{ profile.followingCount }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <a [routerLink]="['followers', profile.id]">
+                                            <span class="twPc-StatLabel twPc-block">Followers</span>
+                                            <span class="twPc-StatValue">{{ profile.followersCount}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="empty">
+            <p>Search came in empty</p>
+        </div>
+    </div>
+</div>
+

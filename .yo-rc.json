@@ -1,0 +1,35 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "com.su.twitter_clone"
+        },
+        "jhipsterVersion": "5.8.2",
+        "applicationType": "monolith",
+        "baseName": "twitterClone",
+        "packageName": "com.su.twitter_clone",
+        "packageFolder": "com/su/twitter_clone",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": false,
+        "messageBroker": false,
+        "serviceDiscoveryType": "eureka",
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "jwtSecretKey": "Y2YzMTA5MTk0ZGE1NzNlZTc3MmZhYTdkNTk5NTUyMjg2MmVhYzBjNWE5MWY0MTU3YjdhMzIwYmMwOWVlMTAzZGYzY2YzZWI3NTg1MTliY2ZiYjJkZTE0Njg5MDNhNzc2YTQyZjA4Njc3ODJlN2UzMWIwNjU1NDNkYzRhZjRiZDM=",
+        "clientFramework": "angularX",
+        "useSass": false,
+        "clientPackageManager": "npm",
+        "testFrameworks": [],
+        "jhiPrefix": "jhi",
+        "entitySuffix": "",
+        "dtoSuffix": "DTO",
+        "otherModules": [],
+        "enableTranslation": false
+    }
+}

@@ -1,0 +1,101 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="kips (generated)" id="1556988445109-1">
+        <createTable tableName="tweets">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="profile_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-2">
+        <createTable tableName="following">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="profile_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="following_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-3">
+        <createTable tableName="profile">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+            </column>
+            <column name="display_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tweets_count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="following_count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="followers_count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-4">
+        <createIndex indexName="following_following_id_fk" tableName="following">
+            <column name="following_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-5">
+        <createIndex indexName="following_user_id_fk" tableName="following">
+            <column name="profile_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-6">
+        <createIndex indexName="tweets_profile_id_fk" tableName="tweets">
+            <column name="profile_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-7">
+        <createIndex indexName="profile_user_id_fk" tableName="profile">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-8">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="profile" constraintName="profile_user_id_fk"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-9">
+        <addForeignKeyConstraint baseColumnNames="following_id" baseTableName="following"
+                                 constraintName="following_following_id_fk" deferrable="false" initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="profile" validate="true"/>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-10">
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="following"
+                                 constraintName="following_user_id_fk" deferrable="false" initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="profile" validate="true"/>
+    </changeSet>
+    <changeSet author="kips (generated)" id="1556988445109-11">
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="tweets" constraintName="tweets_profile_id_fk"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="profile" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
