@@ -37,5 +37,10 @@ export class ProfileDataService {
             this.setProfile(this.myProfile);
         });
     }
+    
+    logout() {
+        this.myProfile = undefined;
+        this.setProfile(this.myProfile);
+    }
 
 }

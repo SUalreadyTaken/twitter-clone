@@ -2,3 +2,11 @@
     <jhi-profile class="col-md-3" style="border: 1px solid black;"></jhi-profile>
     <jhi-timeline class="col-md-6" style="border: 1px solid black;"></jhi-timeline>
 </div>
+<div style="margin: 20px auto; width: 25%" *ngIf="!isAuthenticated()">
+    <div class="alert alert-warning">
+        <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
+        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><br>
+        <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>&nbsp;
+        <a class="alert-link" routerLink="account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+    </div>
+</div>

@@ -4,7 +4,6 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginModalService, AccountService, Account } from 'app/core';
 
-
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
@@ -16,7 +15,7 @@ export class HomeComponent implements OnInit {
 
     constructor(private accountService: AccountService,
                 private loginModalService: LoginModalService,
-                private eventManager: JhiEventManager,) {
+                private eventManager: JhiEventManager) {
     }
 
     ngOnInit() {
@@ -26,7 +25,6 @@ export class HomeComponent implements OnInit {
                this.login();
             }
         });
-
 
         this.registerAuthenticationSuccess();
     }

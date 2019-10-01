@@ -42,7 +42,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
     getProfile() {
         this.profileSubscription = this.profileDataService.getProfile().subscribe(p => {
-            if (p.id) {
+            if (p) {
                this.profile = p;
                this.gotProfile = true;
             }

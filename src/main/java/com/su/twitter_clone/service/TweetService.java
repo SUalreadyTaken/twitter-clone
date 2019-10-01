@@ -118,10 +118,7 @@ public class TweetService {
             List<TweetDTO> tweetDTOList = new ArrayList<>();
             List<ProfileIdAndTweetCount> profileList = new ArrayList<>();
 
-            if (profile.getFollowingCount() > 0) {
-                Pageable tmpPageable = PageRequest.of(0, profile.getFollowingCount());
-                profileList = profileRepository.findFollowingsProfileIdsAndTweetCount(profile, tmpPageable).getContent();
-            }
+            profileList = getProfileIdAndTweetCounts(profile, profileList);
 
             int maxTweetsCount = getMaxTweetsCount(profileList, profile.getTweetsCount());
 
@@ -158,10 +155,7 @@ public class TweetService {
             List<TweetDTO> tweetDTOList = new ArrayList<>();
             List<ProfileIdAndTweetCount> profileList = new ArrayList<>();
 
-            if (profile.getFollowingCount() > 0) {
-                Pageable tmpPageable = PageRequest.of(0, profile.getFollowingCount());
-                profileList = profileRepository.findFollowingsProfileIdsAndTweetCount(profile, tmpPageable).getContent();
-            }
+            profileList = getProfileIdAndTweetCounts(profile, profileList);
 
             int maxTweetsCount = getMaxTweetsCount(profileList, profile.getTweetsCount() - alreadyReceived);
 
@@ -178,6 +172,14 @@ public class TweetService {
             log.error("TweetService.getMoreTimelineTweets didn't find profile linked to user > " + user.getLogin());
         }
         return Collections.emptyList();
+    }
+
+    private List<ProfileIdAndTweetCount> getProfileIdAndTweetCounts(Profile profile, List<ProfileIdAndTweetCount> profileList) {
+        if (profile.getFollowingCount() > 0) {
+            Pageable tmpPageable = PageRequest.of(0, profile.getFollowingCount());
+            profileList = profileRepository.findFollowingsProfileIdsAndTweetCount(profile, tmpPageable).getContent();
+        }
+        return profileList;
     }
 
     private HashSet<Integer> getProfileIds(Profile profile, List<ProfileIdAndTweetCount> profileList) {
@@ -215,17 +217,8 @@ public class TweetService {
             Pageable pageable = PageRequest.of(startPage, PAGE_SIZE, Sort.Direction.DESC, "id");
             List<Tweet> tweetList = tweetRepository.findAll(pageable).getContent();
             if (!tweetList.isEmpty()) {
-                for (Tweet tweet : tweetList) {
-                    if (profileIds.contains(tweet.getProfile().getId())) {
-                        tweetDTOList.add(getTweetDTO(tweet));
-                        resultListSize--;
-                        if (resultListSize == 0) {
-                            break;
-                        }
-                    }
-                }
+                resultListSize = getRightTweets(profileIds, resultListSize, tweetDTOList, tweetList);
             } else {
-                // should not reach
                 break;
             }
             startPage++;
@@ -250,15 +243,7 @@ public class TweetService {
             Pageable pageable = PageRequest.of(startPage, PAGE_SIZE, Sort.Direction.DESC, "id");
             List<Tweet> tweetList = tweetRepository.findAllSinceLast(pageable, lastTweetId).getContent();
             if (!tweetList.isEmpty()) {
-                for (Tweet tweet : tweetList) {
-                    if (profileIds.contains(tweet.getProfile().getId())) {
-                        tweetDTOList.add(getTweetDTO(tweet));
-                        resultListSize--;
-                        if (resultListSize == 0) {
-                            break;
-                        }
-                    }
-                }
+                resultListSize = getRightTweets(profileIds, resultListSize, tweetDTOList, tweetList);
             } else {
                 break;
             }
@@ -266,6 +251,19 @@ public class TweetService {
         }
         return tweetDTOList;
 
+    }
+
+    private int getRightTweets(HashSet<Integer> profileIds, int resultListSize, List<TweetDTO> tweetDTOList, List<Tweet> tweetList) {
+        for (Tweet tweet : tweetList) {
+            if (profileIds.contains(tweet.getProfile().getId())) {
+                tweetDTOList.add(getTweetDTO(tweet));
+                resultListSize--;
+                if (resultListSize == 0) {
+                    break;
+                }
+            }
+        }
+        return resultListSize;
     }
 
     /**
@@ -283,9 +281,11 @@ public class TweetService {
             Tweet tweet = new Tweet(profile, content, LocalDateTime.now());
             tweetRepository.save(tweet);
             profile.setTweetsCount(profile.getTweetsCount() + 1);
-            Pageable pageable = PageRequest.of(0, profile.getFollowersCount());
-            List<Integer> followerIds = followingRepository.findLoggedInUserFollowerIds(profile.getId(), pageable).getContent();
-            wsSessionService.sendNewTweetMessage(followerIds);
+            if (profile.getFollowersCount() > 0) {
+                Pageable pageable = PageRequest.of(0, profile.getFollowersCount());
+                List<Integer> followerIds = followingRepository.findLoggedInUserFollowerIds(profile.getId(), pageable).getContent();
+                wsSessionService.sendNewTweet(followerIds);
+            }
             return getTweetDTO(tweet);
         }
         return null;
