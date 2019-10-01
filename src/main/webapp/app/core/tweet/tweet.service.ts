@@ -59,6 +59,11 @@ export class TweetService implements OnDestroy {
 
     // todo logout
 
+    logout() {
+        this.timeline = undefined;
+        this.gotNewTweet = false;
+    }
+
     // todo notification delete
 
     getProfileTweets(profileId: number): Observable<HttpResponse<Tweet[]>> {

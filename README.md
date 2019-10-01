@@ -21,7 +21,6 @@ npm start
 
 ## atm todo
 
--   logout resets everything
 -   delete websocket
 -   follow websocket
 -   un follow websocket

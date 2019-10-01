@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     tweetsResult: Tweet[];
     searchTweets = true;
     empty = false;
-    profile: MyProfile;
+    myProfile: MyProfile;
     modalRef: NgbModalRef;
     loggedIn = false;
     eventSubscription: Subscription;
@@ -40,13 +40,24 @@ export class SearchComponent implements OnInit, OnDestroy {
             if (account === null) {
                 this.login();
             } else {
-                this.loggedIn = true;
+                this.init()
             }
         });
 
         this.eventSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
-            this.loggedIn = true;
+            this.init();
         });
+    }
+
+    init() {
+        this.profileDataService.getProfile().subscribe(res => {
+            if (res) {
+                this.myProfile = res;
+                if (!this.loggedIn) {
+                    this.loggedIn = true;
+                }
+            }
+        })
     }
 
     onSearch(form: NgForm) {
@@ -82,8 +93,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         const targetProfile = this.profilesResult.find(profile => profile.id === id);
         targetProfile.following = true;
         targetProfile.followersCount++;
-        this.profile.followingCount++;
-        this.profileDataService.setProfile(this.profile);
+        this.myProfile.followingCount++;
+        this.profileDataService.setProfile(this.myProfile);
     }
 
     onDeleteFollow(id: number) {
@@ -91,8 +102,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         const targetProfile = this.profilesResult.find(profile => profile.id === id);
         targetProfile.following = false;
         targetProfile.followersCount--;
-        this.profile.followingCount--;
-        this.profileDataService.setProfile(this.profile);
+        this.myProfile.followingCount--;
+        this.profileDataService.setProfile(this.myProfile);
     }
 
     login() {

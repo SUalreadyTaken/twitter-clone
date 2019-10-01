@@ -49,10 +49,20 @@ export class NotificationService implements OnDestroy {
         this.getNewTweetSubject.next(n);
     }
 
-    ngOnDestroy(): void {
-        if (this.stompClient !== null) {
-            this.stompClient.disconnect();
-        }
-        console.log('Disconnected');
+    logout() {
+        this.disconnect();
+        this.gotId = false;
     }
+
+    ngOnDestroy(): void {
+        this.disconnect();
+    }
+
+    disconnect() {
+        if (this.stompClient) {
+            this.stompClient.disconnect();
+            console.log('Disconnected');
+        }
+    }
+
 }
