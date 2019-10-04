@@ -16,15 +16,10 @@ export class NotificationService implements OnDestroy {
     notificationModel: NotificationModel;
     private getNewTweetSubject = new BehaviorSubject<any>('');
     gotId = false;
-    getNewTweet$ = this.getNewTweetSubject.asObservable();
+    getNotification$ = this.getNewTweetSubject.asObservable();
 
     constructor() {
     }
-
-    /*
-      todo
-      make different subjects newTweets, deleteTweet, unFollowed/followed ( +/- followers)
-     */
 
     initializeWebSocketConnection(id: number) {
         if (!this.gotId) {
@@ -34,10 +29,13 @@ export class NotificationService implements OnDestroy {
             this.stompClient.connect({}, () => {
                 this.stompClient.subscribe('/notification/' + id, res => {
                     if (res.body) {
-                        this.notificationModel = JSON.parse(res.body);
-                        if (this.notificationModel.notification === 'new_tweet') {
-                            this.setNotification(this.notificationModel);
+                        console.log('got this message > ' + res.body);
+                        if (!this.notificationModel) {
+                            this.notificationModel = new NotificationModel(res.body.toString());
+                        } else {
+                            this.notificationModel.notification = res.body.toString();
                         }
+                        this.setNotification(this.notificationModel);
                     }
                 });
             });
@@ -61,7 +59,6 @@ export class NotificationService implements OnDestroy {
     disconnect() {
         if (this.stompClient) {
             this.stompClient.disconnect();
-            console.log('Disconnected');
         }
     }
 

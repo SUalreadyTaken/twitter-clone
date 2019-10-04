@@ -8,6 +8,7 @@ import { ProfileFollow } from 'app/core/profile-follow.model';
 import { MyProfile } from 'app/core/profile/profile.model';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TweetService } from '../../core/tweet/tweet.service';
 
 @Component({
     selector: 'jhi-follow',
@@ -31,7 +32,8 @@ export class FollowComponent implements OnInit, OnDestroy {
                 private profileDataService: ProfileDataService,
                 private accountService: AccountService,
                 private eventManager: JhiEventManager,
-                private loginModalService: LoginModalService) {
+                private loginModalService: LoginModalService,
+                private tweetService: TweetService) {
     }
 
     ngOnInit() {
@@ -100,6 +102,7 @@ export class FollowComponent implements OnInit, OnDestroy {
         targetProfile.followersCount++;
         this.myProfile.followingCount++;
         this.profileDataService.setProfile(this.myProfile);
+        this.tweetService.changeTimeline();
     }
 
     // todo ask conformation.. can delete multiple by accident.. too fast
@@ -111,6 +114,7 @@ export class FollowComponent implements OnInit, OnDestroy {
         targetProfile.followersCount--;
         this.myProfile.followingCount--;
         this.profileDataService.setProfile(this.myProfile);
+        this.tweetService.changeTimeline();
     }
 
     login() {

@@ -68,7 +68,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.newTweetSubscription = this.notificationService.getNewTweet$.subscribe(res => {
+        this.newTweetSubscription = this.notificationService.getNotification$.subscribe(res => {
             if (this.ntSubInit && res.notification === 'new_tweet') {
                 this.newTweet = true;
             }
@@ -104,8 +104,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
             this.lastTweetId = res.body.id;
             this.tweetService.setTimeline(this.timeline);
         });
-        form.reset();
         this.postTweetContent = '';
+        form.reset();
     }
 
     deleteTweet(id: number, tweet: Tweet) {

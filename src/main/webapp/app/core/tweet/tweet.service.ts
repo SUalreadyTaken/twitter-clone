@@ -11,10 +11,11 @@ export class TweetService implements OnDestroy {
     newTweetSubscription: Subscription;
     gotNewTweet = true;
 
-    constructor(private http: HttpClient, private notificationService: NotificationService) {}
+    constructor(private http: HttpClient, private notificationService: NotificationService) {
+    }
 
     initSub() {
-        this.newTweetSubscription = this.notificationService.getNewTweet$.subscribe(r => {
+        this.newTweetSubscription = this.notificationService.getNotification$.subscribe(r => {
             if (r.notification === 'new_tweet') {
                 this.gotNewTweet = true;
             }
@@ -27,7 +28,7 @@ export class TweetService implements OnDestroy {
         }
         if (!this.timeline || this.gotNewTweet) {
             await this.http
-                .get<Tweet[]>(SERVER_API_URL + 'api/tweets/timeline', { observe: 'response' })
+                .get<Tweet[]>(SERVER_API_URL + 'api/tweets/timeline', {observe: 'response'})
                 .toPromise()
                 .then(res => {
                     this.timeline = res.body;
@@ -57,17 +58,17 @@ export class TweetService implements OnDestroy {
         }
     }
 
-    // todo logout
+    changeTimeline() {
+        this.gotNewTweet = true;
+    }
 
     logout() {
         this.timeline = undefined;
         this.gotNewTweet = false;
     }
 
-    // todo notification delete
-
     getProfileTweets(profileId: number): Observable<HttpResponse<Tweet[]>> {
-        return this.http.get<Tweet[]>(SERVER_API_URL + 'api/tweets/profiles/' + profileId, { observe: 'response' });
+        return this.http.get<Tweet[]>(SERVER_API_URL + 'api/tweets/profiles/' + profileId, {observe: 'response'});
     }
 
     getMoreProfileTweets(profileId: number, lastTweetId: number, alreadyReceived: number): Observable<HttpResponse<Tweet[]>> {
@@ -84,21 +85,22 @@ export class TweetService implements OnDestroy {
     getMoreTimelineTweets(tweetId: number, alreadyReceived: number): Observable<HttpResponse<Tweet[]>> {
         return this.http.get<Tweet[]>(SERVER_API_URL + 'api/tweets/more', {
             observe: 'response',
-            params: { lastTweetId: tweetId.toString(), already: alreadyReceived.toString() }
+            params: {lastTweetId: tweetId.toString(), already: alreadyReceived.toString()}
         });
     }
 
     postTweet(content: string): Observable<HttpResponse<Tweet>> {
-        return this.http.post<Tweet>(SERVER_API_URL + 'api/tweets/tweet', content, { observe: 'response' });
+        return this.http.post<Tweet>(SERVER_API_URL + 'api/tweets/tweet', content, {observe: 'response'});
     }
 
     deleteTweet(id: number) {
         this.http
             .delete<any>(SERVER_API_URL + 'api/tweets/delete', {
                 observe: 'response',
-                params: { id: id.toString() }
+                params: {id: id.toString()}
             })
-            .subscribe(res => {});
+            .subscribe(res => {
+            });
     }
 
     ngOnDestroy(): void {
