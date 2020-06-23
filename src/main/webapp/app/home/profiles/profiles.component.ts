@@ -27,7 +27,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
     buttonType = 0;
     profileSubscription: Subscription;
     eventSubscription: Subscription;
-    isMore = true;
+    isMore: boolean;
     lastTweetId: number;
 
     constructor(private route: ActivatedRoute,
@@ -46,12 +46,10 @@ export class ProfilesComponent implements OnInit, OnDestroy {
                 this.login();
             } else {
                 this.init();
-                this.getTweetsList();
             }
         });
         this.eventSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
             this.init();
-            this.getTweetsList();
         });
 
     }
@@ -72,18 +70,19 @@ export class ProfilesComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(
             (params: Params) => {
                 this.id = +params['id'];
+                this.isMore = true;
                 this.profileSubscription = this.profileDataService.getProfile().subscribe(p => {
                     if (p) {
                         this.myProfile = p;
                         this.getProfile();
                     }
                 });
+                this.getTweetsList();
             }
         );
     }
 
     getProfile() {
-        if (!this.profile) {
             this.profileService.getProfileById(this.id).subscribe(profileById => {
                 this.profile = profileById.body;
                 if (this.myProfile.id !== this.profile.id) {
@@ -100,7 +99,6 @@ export class ProfilesComponent implements OnInit, OnDestroy {
                     this.isLoggedIn = true;
                 }
             });
-        }
     }
 
     onSetFollow(id: number) {

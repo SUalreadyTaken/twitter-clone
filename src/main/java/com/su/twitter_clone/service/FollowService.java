@@ -25,10 +25,12 @@ public class FollowService {
     private final Logger log = LoggerFactory.getLogger(FollowService.class);
     private final FollowingRepository followingRepository;
     private final ProfileRepository profileRepository;
+    private final WsSessionService wsSessionService;
 
-    public FollowService(FollowingRepository followingRepository, ProfileRepository profileRepository) {
+    public FollowService(FollowingRepository followingRepository, ProfileRepository profileRepository, WsSessionService wsSessionService) {
         this.followingRepository = followingRepository;
         this.profileRepository = profileRepository;
+        this.wsSessionService = wsSessionService;
     }
 
     /**
@@ -113,6 +115,7 @@ public class FollowService {
             if (otherProfile != null) {
                 otherProfile.setFollowersCount(otherProfile.getFollowersCount() + 1);
                 profileRepository.save(otherProfile);
+                wsSessionService.sendFollow(otherProfile.getId());
             }
             profileRepository.save(myProfile);
         }
@@ -135,6 +138,7 @@ public class FollowService {
             if (otherProfile != null) {
                 otherProfile.setFollowersCount(otherProfile.getFollowersCount() - 1);
                 profileRepository.save(otherProfile);
+                wsSessionService.sendUnFollow(otherProfile.getId());
             }
             profileRepository.save(myProfile);
 

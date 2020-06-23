@@ -1,28 +1,31 @@
 package com.su.twitter_clone.model;
 
+import java.util.List;
+
 public class Notification {
 
-    private String notification;
-    private boolean value;
+    private String message;
+    private List<Integer> destinationIds;
 
-    public Notification(String notification, boolean value) {
-        this.notification = notification;
-        this.value = value;
+    public Notification(String message, List<Integer> destinationIds) {
+        this.message = message;
+        this.destinationIds = destinationIds;
     }
 
-    public String getNotification() {
-        return notification;
+    public List<Integer> getDestinationIds() {
+        return destinationIds;
     }
 
-    public void setNotification(String notification) {
-        this.notification = notification;
+    public void setDestinationIds(List<Integer> destinationIds) {
+        this.destinationIds = destinationIds;
     }
 
-    public boolean isValue() {
-        return value;
+    public String getMessage() {
+        return message;
     }
 
-    public void setValue(boolean value) {
-        this.value = value;
+    public void setMessage(String message) {
+        this.message = message;
     }
+
 }

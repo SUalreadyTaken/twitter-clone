@@ -2,24 +2,35 @@ package com.su.twitter_clone.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 
 @Component
 public class WsSession {
 
-    private Map<Integer, String> currentSession = Collections.synchronizedMap(new LinkedHashMap<>());
+//    private Map<Integer, String> currentSession = Collections.synchronizedMap(new LinkedHashMap<>());
+    private ConcurrentHashMap<Integer, String> currentSession = new ConcurrentHashMap<>();
+    private BlockingQueue<Notification> blockingQueue = new LinkedBlockingDeque<>();
+
 
     /**
      *
      * @return Map|DestinationId,SessionId|
      */
-    public Map<Integer, String> getCurrentSession() {
+    public ConcurrentHashMap<Integer, String> getCurrentSession() {
         return currentSession;
     }
 
-    public void setCurrentSession(Map<Integer, String> currentSession) {
+    public void setCurrentSession(ConcurrentHashMap<Integer, String> currentSession) {
         this.currentSession = currentSession;
+    }
+
+    public BlockingQueue<Notification> getBlockingQueue() {
+        return blockingQueue;
+    }
+
+    public void setBlockingQueue(BlockingQueue<Notification> blockingQueue) {
+        this.blockingQueue = blockingQueue;
     }
 }
